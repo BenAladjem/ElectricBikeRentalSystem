@@ -1,8 +1,9 @@
-from models.enums import RidersRole
+from db import db
+from models.enums import RiderRole
 
-class  RidersModel:
+class  RiderModel:
     abstract = True
-    # не се използва, само съдържа общите характеристики на класовете наследници
+
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
@@ -12,19 +13,19 @@ class  RidersModel:
 
 class CustomerModel(RidersModel):
     tablename = "customers"
-
-    role = db.Column(db.Enum(RidersRole), default=RidersRole.customer, nullable=False)
+    rentals = db.relationship("Rental", backref="rent", lazy='dynamic')
+    role = db.Column(db.Enum(RiderRole), default=RiderRole.customer, nullable=False)
 
 
 
 class StaffModel(RidersModel):
     tablename = "staffs"
-    role = db.Column(db.Enum(RidersRole), default=RidersRole.staff, nullable=False)
+    role = db.Column(db.Enum(RiderRole), default=RiderRole.staff, nullable=False)
 
 
 class AdministratorModel(RidersModel):
     tablename = "administrators"
-    role = db.Column(db.Enum(RidersRole), default=RidersRole.administrator, nullable=False)
+    role = db.Column(db.Enum(RiderRole), default=RiderRole.administrator, nullable=False)
 
 
 
